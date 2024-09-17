@@ -8,6 +8,7 @@ from .views import (
                     TestScenarioDetailAPIView,
                     TestCaseListAPIView,
                     TestCaseDetailAPIView,
+                    ExportTCTSView,
                     )
 
 urlpatterns = [
@@ -21,4 +22,7 @@ urlpatterns = [
     # TestCase URLs
     path('test_cases/', TestCaseListAPIView.as_view(), name='test-case-list'),
     path('test_cases/<int:id>/', TestCaseDetailAPIView.as_view(), name='test-case-detail'),
+    
+    # Export in Excel file
+    path('export-tcts/', ExportTCTSView.as_view(), name='export-tcts'),
 ]

@@ -1,3 +1,5 @@
+import openpyxl
+from openpyxl.styles import Font
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -317,3 +319,65 @@ def generate_test_case(web_application, feature):
     )
 
     driver.quit()
+
+
+def generate_test_scenarios_and_cases_excel(test_scenarios, test_cases):
+    # Create a new workbook and add sheets
+    wb = openpyxl.Workbook()
+    
+    # Add Test Scenarios sheet
+    ws_scenarios = wb.active
+    ws_scenarios.title = 'Test Scenarios'
+
+    # Add header
+    headers_scenarios = [
+        'Scenario ID', 'Feature Name', 'Description', 'Purpose', 'Web Application'
+    ]
+    ws_scenarios.append(headers_scenarios)
+
+    # Apply bold font to header row
+    for cell in ws_scenarios[1]:
+        cell.font = Font(size=12, bold=True)
+
+    # Add test scenarios data
+    for scenario in test_scenarios:
+        ws_scenarios.append([
+            scenario.scenario_id,
+            scenario.feature.name,
+            scenario.description,
+            scenario.purpose,
+            scenario.web_application.name
+        ])
+
+    # Add Test Cases sheet
+    ws_cases = wb.create_sheet(title='Test Cases')
+
+    # Add header
+    headers_cases = [
+        'Test Case ID', 'Scenario ID', 'Description', 'Pre-Conditions', 'Test Steps',
+        'Test Data', 'Expected Result', 'Post-Conditions', 'Priority', 'Test Environment', 'Tester Name', 'Date'
+    ]
+    ws_cases.append(headers_cases)
+
+    # Apply bold font to header row
+    for cell in ws_cases[1]:
+        cell.font = Font(size=12, bold=True)
+
+    # Add test cases data
+    for case in test_cases:
+        ws_cases.append([
+            case.test_case_id,
+            case.test_scenario.scenario_id,
+            case.description,
+            case.pre_conditions,
+            case.test_steps,
+            case.test_data,
+            case.expected_result,
+            case.post_conditions,
+            case.priority,
+            case.test_environment,
+            case.tester_name,
+            case.date
+        ])
+
+    return wb
